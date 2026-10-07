@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ジブン迷子 — 就活自己分析の問題定義</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--bg:#f4f2ec;--ink:#111311;--muted:#6b6f6b;--card:#ffffff;--line:#e5e1d8;--accent:#111311;--pill:#111311}
+*{box-sizing:border-box}
+body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",Inter,sans-serif;margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+nav{position:sticky;top:12px;z-index:50;max-width:1120px;margin:12px auto 0;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;display:flex;align-items:center;justify-content:space-between;padding:10px 10px 10px 22px}
+.logo{font-weight:800;letter-spacing:.02em;font-size:20px}
+.logo span{font-weight:400}
+.navlinks{display:flex;gap:22px;font-size:14px;color:#333}
+.navlinks a{text-decoration:none}
+.btn{display:inline-block;background:var(--pill);color:#fff;border-radius:999px;padding:12px 22px;text-decoration:none;font-size:14px;font-weight:700;border:1px solid var(--pill)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.hero{padding:72px 0 20px}
+.eyebrow{display:flex;gap:12px;align-items:center;font-size:13px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block}
+.badge{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:13px}
+h1{font-size:clamp(44px,8vw,96px);line-height:.95;letter-spacing:-.04em;margin:18px 0 16px;font-weight:800}
+h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
+.sub{font-size:18px;color:#333;max-width:640px;line-height:1.7}
+.cta{display:flex;gap:12px;margin:24px 0}
+.trusted{margin:28px 0 8px;color:var(--muted);font-size:13px}
+.marquee{display:flex;gap:12px;flex-wrap:wrap}
+.marquee span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-size:14px}
+.sec{padding:36px 0}
+.secnum{font-size:13px;color:var(--muted)}
+h2{font-size:clamp(28px,4vw,48px);letter-spacing:-.03em;line-height:1.05;margin:8px 0 8px}
+h2 .outline{color:transparent;-webkit-text-stroke:1.5px var(--ink)}
+.lead{color:#333;max-width:680px;line-height:1.7}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+@media(max-width:800px){.stats{grid-template-columns:1fr 1fr}.navlinks{display:none}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
+.stat b{font-size:36px;letter-spacing:-.03em;display:block}
+.stat small{color:var(--muted);line-height:1.5;display:block;margin-top:6px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+@media(max-width:800px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
+.card .no{font-size:13px;color:var(--muted)}
+.card h3{font-size:22px;margin:8px 0}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.tags span{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;background:#faf9f6}
+.big{font-size:44px;font-weight:800;letter-spacing:-.03em}
+.work{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.work img{width:100%;display:block;background:#fff}
+.work .pad{padding:20px}
+.quote{background:#111311;color:#fff;border-radius:20px;padding:36px;font-size:clamp(18px,2.6vw,28px);line-height:1.6;margin-top:12px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+@media(max-width:800px){.steps{grid-template-columns:1fr 1fr}}
+.step{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:12px 10px;text-align:left;vertical-align:top}
+th{background:#faf9f6}
+td a{color:#0b5fff}
+.problem{background:#fff;border:2px solid #111311;border-radius:20px;padding:28px;text-align:center;font-size:clamp(17px,2.4vw,24px);font-weight:800;line-height:1.7;margin-top:16px}
+footer{background:#111311;color:#fff;border-radius:24px 24px 0 0;padding:40px 0;margin-top:40px}
+footer .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:20px}
+@media(max-width:800px){footer .wrap{grid-template-columns:1fr}}
+canvas{max-height:300px}
+.src{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="logo">ジブン<span>迷子.</span></div>
+<div class="navlinks"><a href="#studio">理想と現状</a><a href="#services">データ</a><a href="#work">グラフ</a><a href="#process">問題定義</a><a href="#data">データ集</a></div>
+<a class="btn" href="問題定義プレゼン_自己分析迷子.pptx">発表資料を入手</a>
+</nav>
+
+<div class="wrap">
+<div class="hero">
+<div class="eyebrow"><span class="dot"></span> 特別演習II — 問題定義プレゼンテーション <span class="badge">次回授業用 ● 発表準備中</span></div>
+<h1>なんとなく就活を、<br><span class="outline">なくそう。</span></h1>
+<p class="sub">本来は全員が十分な自己理解を持って就活に挑むべきにもかかわらず、やり方とゴールが分からないために、6割が苦戦したまま選考に進んでしまう — それが今回定義する問題です。</p>
+<div class="cta"><a class="btn" href="#process">問題定義を見る</a><a class="btn ghost" href="#work">データを見る</a></div>
+<div class="trusted">Trusted by data from</div>
+<div class="marquee"><span>学情 n=275</span><span>マイナビ n=1268</span><span>dodaキャンパス n=317</span><span>就職白書2026 企業1182社</span><span>Synergy n=200</span></div>
+</div>
+
+<div class="sec" id="studio">
+<div class="secnum">(01) 理想と現状 — The gap</div>
+<h2>あるべき姿と、<span class="outline">いまの姿。</span></h2>
+<p class="lead">理想：客観的データと正しい手法に基づく自己理解を持って挑む。現状：手順もゴールも不明なまま10〜12月の本格化期に突入する。</p>
+<div class="stats">
+<div class="stat"><b>60.7%</b><small>就活で大変だったこと1位が自己分析<br><a href="https://service.gakujo.ne.jp/wp-content/uploads/2025/09/250930-navienq.pdf">学情 26卒 n=275</a></small></div>
+<div class="stat"><b>35.2%</b><small>9月の未内々定者が自己分析に逆戻り<br><a href="https://career-research.mynavi.jp/reserch/20251010_103406/">マイナビ 26卒 n=1268</a></small></div>
+<div class="stat"><b>93.8%</b><small>採用基準で「人柄」を重視する企業<br><a href="https://jbrc.recruit.co.jp/common/images/mirai/uploads/2026/02/hakusho2026_data.pdf">就職白書2026 n=1182社</a></small></div>
+<div class="stat"><b>40%</b><small>入社後にギャップを感じた社会人<br><a href="https://campus.doda.jp/career/self-analysis/000335.html">doda 社会人 n=124</a></small></div>
+</div>
+</div>
+
+<div class="sec" id="services">
+<div class="secnum">(02) データで見る現状 — Services</div>
+<h2>数字が語る、<span class="outline">4つの事実。</span></h2>
+<div class="cards">
+<div class="card"><div class="no">01 / 学情</div><h3>大変さ1位も、頑張って良かった1位も自己分析</h3><div class="big">60.7% / 46.5%</div><div class="tags"><span>26卒 n=275</span><span>2025.8-9</span><span>複数回答</span></div><p>大変：自己分析60.7 / 面接57.1 / ES45.8。自由記述「不十分で強みと企業を掛け合わせられなかった」。 <a href="https://service.gakujo.ne.jp/wp-content/uploads/2025/09/250930-navienq.pdf">PDF原文 →</a></p></div>
+<div class="card"><div class="no">02 / マイナビ × doda</div><h3>秋になっても土台作りに戻る</h3><div class="big">35.2% / 42.6%</div><div class="tags"><span>マイナビ n=1268</span><span>doda n=317</span></div><p>未内々定者の9月活動：企業研究39.2 / 業界38.5 / 自己分析35.2。ESで最も重要だったことは自己分析42.6%。 <a href="https://career-research.mynavi.jp/reserch/20251010_103406/">マイナビ →</a> <a href="https://campus.doda.jp/career/self-analysis/000335.html">doda →</a></p></div>
+<div class="card"><div class="no">03 / Synergy 適職診断</div><h3>試すけど、納得できない</h3><div class="big">53.0% → 30.5%</div><div class="tags"><span>n=200</span><span>信頼 30.5%</span><span>保留 42.0%</span></div><p>経験53.0%、一致58.3%、でも信頼できる30.5%・どちらともいえない42.0%。「職種と結びつかない」が不信理由。 <a href="https://prtimes.jp/main/html/rd/p/000000069.000065508.html">PR TIMES →</a></p></div>
+<div class="card"><div class="no">04 / 就職白書 × 社会人</div><h3>企業は人柄を見ている</h3><div class="big">93.8% / 40%</div><div class="tags"><span>企業1182社</span><span>学生1326人</span><span>AI利用57.1%</span></div><p>学生アピール：バイト46.1 / 人柄40.9。AI利用者の57.1%が自己分析で使用。社会人40%が入社後ギャップ。 <a href="https://jbrc.recruit.co.jp/common/images/mirai/uploads/2026/02/hakusho2026_data.pdf">白書PDF →</a></p></div>
+</div>
+</div>
+
+<div class="sec" id="work">
+<div class="secnum">(03) グラフで見る証拠 — Selected work</div>
+<h2>スライドそのまま、<span class="outline">貼れる図。</span></h2>
+<div class="cards">
+<div class="work"><img src="img/gakujo_taihen.png" alt="学情"><div class="pad"><div class="no">2025 / Gakujo</div><h3>大変だったこと1位は自己分析 60.7%</h3><div class="tags"><span>スライド3用</span></div></div></div>
+<div class="work"><img src="img/mynavi_activities.png" alt="マイナビ"><div class="pad"><div class="no">2025 / Mynavi</div><h3>9月も35.2%が自己分析に立ち戻る</h3><div class="tags"><span>スライド3用</span></div></div></div>
+<div class="work"><img src="img/synergy_trust.png" alt="信頼度"><div class="pad"><div class="no">2025 / Synergy</div><h3>信頼できる30.5%・保留42.0%</h3><div class="tags"><span>スライド4用</span></div></div></div>
+<div class="work"><img src="img/hakusho_kigyo.png" alt="白書"><div class="pad"><div class="no">2026 / Hakusho</div><h3>人柄重視93.8%の企業</h3><div class="tags"><span>スライド5用</span></div></div></div>
+</div>
+<div class="cards" style="margin-top:12px">
+<div class="card"><h3>インタラクティブ図（発表用）</h3><canvas id="c1"></canvas><p class="src">学情：自己分析60.7 / 面接57.1 / ES45.8 <a href="https://service.gakujo.ne.jp/wp-content/uploads/2025/09/250930-navienq.pdf">出典</a></p></div>
+<div class="card"><h3>未内々定者の9月活動</h3><canvas id="c2"></canvas><p class="src">マイナビ n=1268 <a href="https://career-research.mynavi.jp/reserch/20251010_103406/">出典</a></p></div>
+</div>
+<div class="quote">“自己分析が不十分だったため、面接やESで自分の強みと企業の強みを掛け合わせてアピールするのが難しかった” — 26卒の声（学情調査より）</div>
+</div>
+
+<div class="sec" id="process">
+<div class="secnum">(04) 問題定義 — Process</div>
+<h2>だから、問題は<span class="outline">これだ。</span></h2>
+<div class="problem">本来は全員が十分な自己理解で挑むべきにもかかわらず、<br>やり方とゴールが分からないために、6割が苦戦したまま選考に進んでしまうことが問題である。</div>
+<div class="steps">
+<div class="step"><div class="no">01 / Discover 理想</div><h3>十分な自己理解で挑む</h3><p>強みを経験と語れる・軸がある・人柄を言語化できる。</p></div>
+<div class="step"><div class="no">02 / Design 現状</div><h3>手順もゴールも不明</h3><p>60.7%が大変・35%が秋に逆戻り・信頼できる30.5%のみ。</p></div>
+<div class="step"><div class="no">03 / Build ギャップ</div><h3>自信なきまま選考へ</h3><p>ES重要度42.6%なのに土台ゼロでスタートする往復構造。</p></div>
+<div class="step"><div class="no">04 / Evolve 意義</div><h3>放置は三者損失</h3><p>学生の納得低下・企業の人柄評価不能・社会のミスマッチ40%。</p></div>
+</div>
+</div>
+
+<div class="sec" id="data">
+<div class="secnum">(05) データ集 — All numbers</div>
+<h2>全数値と<span class="outline">出典リンク。</span></h2>
+<table>
+<tr><th>項目</th><th>数値</th><th>ソース</th></tr>
+<tr><td>大変だったこと1位 自己分析</td><td><b>60.7%</b>（面接57.1/ES45.8）</td><td><a href="https://service.gakujo.ne.jp/wp-content/uploads/2025/09/250930-navienq.pdf">学情 26卒 n=275 PDF</a></td></tr>
+<tr><td>頑張って良かった1位 自己分析</td><td><b>46.5%</b></td><td><a href="https://service.gakujo.ne.jp/wp-content/uploads/2025/09/250930-navienq.pdf">同上</a></td></tr>
+<tr><td>ESで最も重要 自己分析 / 自己PRは自己分析基に</td><td><b>42.6% / 41%</b></td><td><a href="https://campus.doda.jp/career/self-analysis/000335.html">doda n=317</a></td></tr>
+<tr><td>開始3年4-6月 / 手法ツール・自分史</td><td><b>35% / 30%・21%</b></td><td><a href="https://campus.doda.jp/career/self-analysis/000335.html">doda n=239</a></td></tr>
+<tr><td>9月未内々定者 自己分析</td><td><b>35.2%</b>（企業研究39.2）</td><td><a href="https://career-research.mynavi.jp/reserch/20251010_103406/">マイナビ n=1268</a></td></tr>
+<tr><td>適職診断経験 / 一致 / 信頼 / 保留</td><td><b>53.0 / 58.3 / 30.5 / 42.0%</b></td><td><a href="https://prtimes.jp/main/html/rd/p/000000069.000065508.html">Synergy n=200</a></td></tr>
+<tr><td>企業 人柄重視 / 学生人柄アピール / AI自己分析利用</td><td><b>93.8 / 40.9 / 57.1%</b></td><td><a href="https://jbrc.recruit.co.jp/common/images/mirai/uploads/2026/02/hakusho2026_data.pdf">白書PDF</a> <a href="https://kigyobunseki.com/column/jiko-bunseki-dekinai">解説</a></td></tr>
+<tr><td>入社後ギャップあり</td><td><b>40%</b></td><td><a href="https://campus.doda.jp/career/self-analysis/000335.html">doda 社会人n=124</a></td></tr>
+</table>
+<p class="src">3年10-12月限定の一次統計は非公開のため、マイナビ9月値＋開始時期35%で代替。引用時はn数・期間を併記すること。</p>
+</div>
+</div>
+
+<footer><div class="wrap">
+<div><h2 style="color:#fff">発表準備は、<br>この1ページから。</h2><p style="color:#aaa">pptx・グラフ・出典をひとまとめ。次回授業でそのまま使えます。</p><div class="cta"><a class="btn" style="background:#fff;color:#111" href="問題定義プレゼン_自己分析迷子.pptx">pptxを開く</a><a class="btn ghost" style="color:#fff;border-color:#fff" href="データ集.md">データ集.md</a></div></div>
+<div><p>Studio<br>特別演習II / チーム課題<br>テーマ：就活×自己分析</p><p><a href="#studio" style="color:#fff">理想と現状</a><br><a href="#data" style="color:#fff">データ集</a></p><p class="src">© 2026 Jibun-Mayogo — Onda-inspired layout</p></div>
+</div></footer>
+
+<script>
+new Chart(document.getElementById('c1'),{type:'bar',data:{labels:['自己分析','面接','ES','業界研究','インターン','筆記'],datasets:[{data:[60.7,57.1,45.8,39.6,27.3,23.3],backgroundColor:'#111311',borderRadius:8}]},options:{plugins:{legend:{display:false}},scales:{y:{max:70}}}});
+new Chart(document.getElementById('c2'),{type:'bar',data:{labels:['企業研究','業界研究','自己分析'],datasets:[{data:[39.2,38.5,35.2],backgroundColor:['#111311','#555','#c9c5bb'],borderRadius:8}]},options:{plugins:{legend:{display:false}},scales:{y:{max:50}}}});
+</script>
+</body>
+</html>
