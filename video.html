@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>動画5パターン ｜ ジブン迷子</title>
+<style>
+:root{--bg:#f4f2ec;--ink:#111311;--muted:#6b6f6b;--line:#e5e1d8}
+*{box-sizing:border-box}body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;margin:0;background:var(--bg);color:var(--ink)}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px 60px}
+nav{position:sticky;top:12px;z-index:50;max-width:1060px;margin:12px auto 0;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;display:flex;justify-content:space-between;align-items:center;padding:10px 10px 10px 20px}
+.logo{font-weight:800}.logo a{text-decoration:none;color:inherit}
+.btn{background:#111311;color:#fff;border-radius:999px;padding:10px 20px;text-decoration:none;font-size:14px;font-weight:700}
+h1{font-size:clamp(34px,5vw,60px);letter-spacing:-.03em;margin:36px 0 8px}
+.sub{color:#333;line-height:1.8}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px}
+.card h2{font-size:20px;margin:12px 0 4px}
+.card p{font-size:14px;color:var(--muted);margin:4px 0 12px;line-height:1.7}
+video{width:100%;border-radius:12px;background:#000}
+.card.wide{grid-column:1/-1}
+.tag{display:inline-block;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:3px 12px;background:#faf9f6;margin-right:6px}
+.src{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<nav><div class="logo"><a href="index.html">ジブン迷子.</a></div><a class="btn" href="index.html">データ集へ戻る</a></nav>
+<div class="wrap">
+<h1>動画は5パターン。</h1>
+<p class="sub">Remotionでレンダリングした発表動画集。用途に合わせて使い分けてください。全て無音です。</p>
+<div class="grid">
+<div class="card wide"><video src="jibun-mayogo.mp4" controls preload="metadata"></video><h2>① Ondaライト版 <span class="tag">38秒</span> <span class="tag">1920×1080</span></h2><p>基本形。授業の発表そのままに使えるフル尺。ベージュ基調のOnda風デザイン。</p></div>
+<div class="card"><video src="dark-impact.mp4" controls preload="metadata"></video><h2>② ダーク版 <span class="tag">38秒</span> <span class="tag">1920×1080</span></h2><p>黒基調の高コントラスト版。プロジェクタ投影・インパクト重視の場面に。</p></div>
+<div class="card"><video src="digest.mp4" controls preload="metadata"></video><h2>③ ダイジェスト版 <span class="tag">約18秒</span> <span class="tag">1920×1080</span></h2><p>短縮版。冒頭の掴みや時間制限が厳しい発表・共有用に。</p></div>
+<div class="card"><video src="data-story.mp4" controls preload="metadata"></video><h2>④ データ重視版 <span class="tag">43秒</span> <span class="tag">1920×1080</span></h2><p>統計シーンを14秒に延長。根拠の説明に時間を割きたい審査向け。</p></div>
+<div class="card"><video src="vertical-short.mp4" controls preload="metadata"></video><h2>⑤ 縦型ショート版 <span class="tag">27秒</span> <span class="tag">1080×1920</span></h2><p>スマホ・SNS・Shorts向け縦長版。チーム内共有や拡散用に。</p></div>
+</div>
+<p class="src">Remotion（React）で作成・レンダリング ｜ video/src 配下がソース</p>
+</div>
+</body>
+</html>
