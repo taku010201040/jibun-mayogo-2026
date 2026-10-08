@@ -27,8 +27,11 @@ h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
 .sub{font-size:18px;color:#333;max-width:640px;line-height:1.7}
 .cta{display:flex;gap:12px;margin:24px 0}
 .trusted{margin:28px 0 8px;color:var(--muted);font-size:13px}
-.marquee{display:flex;gap:12px;flex-wrap:wrap}
+.marquee{overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.marquee .track{display:inline-flex;gap:12px;padding:4px 6px;animation:scrollX 22s linear infinite}
+.marquee:hover .track{animation-play-state:paused}
 .marquee span{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-size:14px}
+@keyframes scrollX{to{transform:translateX(-50%)}}
 .sec{padding:36px 0}
 .secnum{font-size:13px;color:var(--muted)}
 h2{font-size:clamp(28px,4vw,48px);letter-spacing:-.03em;line-height:1.05;margin:8px 0 8px}
@@ -64,6 +67,27 @@ footer .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:20px}
 @media(max-width:800px){footer .wrap{grid-template-columns:1fr}}
 canvas{max-height:300px}
 .src{font-size:12px;color:var(--muted)}
+html{scroll-behavior:smooth}
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.hero>*{animation:fadeUp .8s cubic-bezier(.2,.7,.2,1) both}
+.hero>*:nth-child(2){animation-delay:.08s}.hero>*:nth-child(3){animation-delay:.16s}
+.hero>*:nth-child(4){animation-delay:.24s}.hero>*:nth-child(6){animation-delay:.32s}
+.dot{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.6}}
+.btn{transition:transform .25s ease,box-shadow .25s ease,background .25s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(17,19,17,.18)}
+.navlinks a{position:relative;transition:opacity .2s}
+.navlinks a::after{content:"";position:absolute;left:0;bottom:-4px;height:2px;width:0;background:var(--ink);border-radius:2px;transition:width .25s ease}
+.navlinks a:hover::after{width:100%}
+.stat,.card,.work,.step{transition:transform .3s ease,box-shadow .3s ease,opacity .7s cubic-bezier(.2,.7,.2,1)}
+.stat:hover,.card:hover,.work:hover,.step:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(17,19,17,.12)}
+.work img{transition:transform .5s ease}
+.work:hover img{transform:scale(1.03)}
+.reveal{opacity:0;transform:translateY(28px)}
+.reveal.in{opacity:1;transform:none}
+.problem{transition:box-shadow .3s ease,transform .3s ease}
+.problem:hover{box-shadow:0 14px 34px rgba(185,28,28,.16);transform:translateY(-3px)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -81,7 +105,7 @@ canvas{max-height:300px}
 <p class="sub">本来は全員が十分な自己理解を持って就活に挑むべきにもかかわらず、やり方とゴールが分からないために、6割が苦戦したまま選考に進んでしまう — それが今回定義する問題です。</p>
 <div class="cta"><a class="btn" href="#process">問題定義を見る</a><a class="btn ghost" href="#work">データを見る</a><a class="btn ghost" href="kadai.html">課題設定スライド →</a></div>
 <div class="trusted">Trusted by data from</div>
-<div class="marquee"><span>学情 n=275</span><span>マイナビ n=1268</span><span>dodaキャンパス n=317</span><span>就職白書2026 企業1182社</span><span>Synergy n=200</span></div>
+<div class="marquee"><div class="track"><span>学情 n=275</span><span>マイナビ n=1268</span><span>dodaキャンパス n=317</span><span>就職白書2026 企業1182社</span><span>Synergy n=200</span></div></div>
 </div>
 
 <div class="sec" id="studio">
@@ -161,6 +185,31 @@ canvas{max-height:300px}
 <script>
 new Chart(document.getElementById('c1'),{type:'bar',data:{labels:['自己分析','面接','ES','業界研究','インターン','筆記'],datasets:[{data:[60.7,57.1,45.8,39.6,27.3,23.3],backgroundColor:'#111311',borderRadius:8}]},options:{plugins:{legend:{display:false}},scales:{y:{max:70}}}});
 new Chart(document.getElementById('c2'),{type:'bar',data:{labels:['企業研究','業界研究','自己分析'],datasets:[{data:[39.2,38.5,35.2],backgroundColor:['#111311','#555','#c9c5bb'],borderRadius:8}]},options:{plugins:{legend:{display:false}},scales:{y:{max:50}}}});
+(function(){
+var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// marquee複製（シームレスループ用）
+var track=document.querySelector('.marquee .track');
+if(track){track.innerHTML+=track.innerHTML;}
+// スクロールリビール（グループ内でずらして表示）
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+document.querySelectorAll('.sec,.stats,.cards,.steps').forEach(function(g){
+var items=g.classList.contains('sec')?[g]:g.querySelectorAll(':scope > *');
+items.forEach(function(el,i){el.classList.add('reveal');el.style.transitionDelay=Math.min(i*90,450)+'ms';io.observe(el);});
+});
+document.querySelectorAll('.quote,.problem').forEach(function(el){el.classList.add('reveal');io.observe(el);});
+// 数字カウントアップ
+function countUp(el){
+var m=el.textContent.match(/([\d.]+)/);if(!m)return;
+var target=parseFloat(m[1]),dec=(m[1].split('.')[1]||'').length,suf=el.textContent.replace(m[0],'');
+if(reduce){el.textContent=target.toFixed(dec)+suf;return;}
+var t0=null,dur=1200;
+function step(t){if(!t0)t0=t;var p=Math.min((t-t0)/dur,1),e=1-Math.pow(1-p,3);
+el.textContent=(target*e).toFixed(dec)+suf;if(p<1)requestAnimationFrame(step);}
+requestAnimationFrame(step);
+}
+var nio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){countUp(e.target);nio.unobserve(e.target);}})},{threshold:.4});
+document.querySelectorAll('.stat b,.big').forEach(function(el){nio.observe(el);});
+})();
 </script>
 </body>
 </html>

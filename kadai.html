@@ -30,7 +30,21 @@ img.graph{width:100%;border:1px solid var(--line);border-radius:16px;background:
 @media(max-width:700px){.two{grid-template-columns:1fr}}
 .dark{background:#111311;color:#fff;border-radius:14px;padding:16px;text-align:center;font-weight:700}
 .src{font-size:12px;color:var(--muted)}a{color:#0b5fff}
+html{scroll-behavior:smooth}
+.btn{transition:transform .25s ease,box-shadow .25s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(17,19,17,.2)}
+.slide{transition:transform .3s ease,box-shadow .3s ease}
+.slide:hover{box-shadow:0 14px 34px rgba(17,19,17,.1)}
+.box,.mini{transition:transform .3s ease,box-shadow .3s ease}
+.box:hover,.mini:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(17,19,17,.12)}
+.box.red:hover{box-shadow:0 12px 26px rgba(185,28,28,.18)}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+tbody tr{transition:background .2s}
+tbody tr:hover{background:#faf9f6}
+@media print{.reveal{opacity:1!important;transform:none!important}}
 @media print{.slide{break-inside:avoid}nav{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -114,5 +128,15 @@ img.graph{width:100%;border:1px solid var(--line);border-radius:16px;background:
 </section>
 
 </div>
+<script>
+(function(){
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.1});
+document.querySelectorAll('.slide').forEach(function(s){
+s.classList.add('reveal');io.observe(s);
+var inner=s.querySelectorAll('.box,.mini,.problem');
+inner.forEach(function(el,i){el.classList.add('reveal');el.style.transitionDelay=Math.min(i*100,500)+'ms';io.observe(el);});
+});
+})();
+</script>
 </body>
 </html>
